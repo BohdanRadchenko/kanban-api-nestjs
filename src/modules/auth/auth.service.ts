@@ -85,10 +85,7 @@ export class AuthService {
 		if (!user || !user.refreshToken) {
 			throw new ForbiddenException('Access Denied');
 		}
-		const refreshTokenMatches = await argon2.verify(
-			user.refreshToken,
-			refreshToken,
-		);
+		const refreshTokenMatches = await argon2.verify(user.refreshToken, refreshToken);
 		if (!refreshTokenMatches) {
 			throw new ForbiddenException('Access Denied');
 		}

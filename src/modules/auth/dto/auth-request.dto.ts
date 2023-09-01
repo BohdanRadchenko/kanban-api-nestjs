@@ -9,7 +9,7 @@ export class AuthRequestDto {
 
 	@IsString()
 	@IsNotEmpty()
-	@MinLength(8)
+	@MinLength(3)
 	@MaxLength(16)
 	password!: string;
 }
