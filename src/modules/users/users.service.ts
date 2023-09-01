@@ -15,6 +15,14 @@ export class UsersService {
 		return this.userRepository.find();
 	}
 
+	public async getById(id: User['id']): Promise<User> {
+		const user = await this.userRepository.findOneBy({ id });
+		if (!user) {
+			throw new NotFoundException(`User with ID: ${id} not found!`);
+		}
+		return user;
+	}
+
 	public async getByUsername(username: string): Promise<User> {
 		const user = await this.userRepository.findOneBy({ username });
 		if (!user) {
