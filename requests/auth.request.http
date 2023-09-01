@@ -1,0 +1,20 @@
+### login
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "test username",
+  "password": "test password"
+}
+
+### logout
+GET http://localhost:8080/api/auth/logout
+
+### register
+POST http://localhost:8080/api/auth/register
+Content-Type: application/json
+
+{
+  "username": "test username",
+  "password": "test password"
+}
