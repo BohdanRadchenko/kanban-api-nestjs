@@ -16,11 +16,11 @@ export class User extends AbstractEntity {
 	@Prop()
 	refreshToken: string;
 
-	public async compare(password: string): Promise<boolean> {
-		return await bcrypt.compare(password, this.passwordHash);
+	public static async compare(hash: string, password: string): Promise<boolean> {
+		return await bcrypt.compare(password, hash);
 	}
 
-	static of(dto: AuthRequestDto): User {
+	public static of(dto: AuthRequestDto): User {
 		const user = new User();
 		user.username = dto.username;
 		user.passwordHash = bcrypt.hashSync(dto.password, SALT_OR_ROUNDS);

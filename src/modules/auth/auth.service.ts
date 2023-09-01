@@ -22,8 +22,12 @@ export class AuthService {
 		return argon2.hash(data);
 	}
 
+	private async verify(hash: string, plain: string): Promise<boolean> {
+		return argon2.verify(hash, plain);
+	}
+
 	private async generateTokens(user: User): Promise<{ accessToken: string; refreshToken: string }> {
-		const payload: IJwtPayload = { username: user.username, id: user.id };
+		const payload: IJwtPayload = { username: user.username, _id: user._id };
 		const [accessToken, refreshToken] = await Promise.all([
 			this.jwt.signAsync(payload, {
 				secret: this.config.get('JWT_ACCESS_SECRET'),
@@ -41,14 +45,14 @@ export class AuthService {
 		};
 	}
 
-	private async updateRefreshToken(userId: User['id'], refreshToken: string) {
+	private async updateRefreshToken(userId: User['_id'], refreshToken: string) {
 		if (!refreshToken) return;
 		const hashedRefreshToken = await this.hashData(refreshToken);
 		await this.usersService.updateRefreshToken(userId, hashedRefreshToken);
 	}
 
 	private async validateUserPassword(user: User, password): Promise<boolean> {
-		const isCorrectPassword = user.compare(password);
+		const isCorrectPassword = await User.compare(user.passwordHash, password);
 		if (!isCorrectPassword) {
 			throw new BadRequestException('Invalid password');
 		}
@@ -57,7 +61,7 @@ export class AuthService {
 
 	private async login(user: User): Promise<AuthResponseDto> {
 		const { accessToken, refreshToken } = await this.generateTokens(user);
-		await this.updateRefreshToken(user.id, refreshToken);
+		await this.updateRefreshToken(user._id, refreshToken);
 		return new AuthResponseDto(accessToken, refreshToken, user);
 	}
 
@@ -72,20 +76,21 @@ export class AuthService {
 		if (isExist) {
 			throw new AlreadyExistException(`User with username: "${dto.username}" already exist!`);
 		}
+
 		const user = await this.usersService.save(User.of(dto));
 		return this.login(user);
 	}
 
-	public async logout(userId: User['id']) {
+	public async logout(userId: User['_id']) {
 		return this.updateRefreshToken(userId, null);
 	}
 
-	public async refreshTokens(userId: User['id'], refreshToken: string) {
+	public async refreshTokens(userId: User['_id'], refreshToken: string) {
 		const user = await this.usersService.getById(userId);
 		if (!user || !user.refreshToken) {
 			throw new ForbiddenException('Access Denied');
 		}
-		const refreshTokenMatches = await argon2.verify(user.refreshToken, refreshToken);
+		const refreshTokenMatches = await this.verify(user.refreshToken, refreshToken);
 		if (!refreshTokenMatches) {
 			throw new ForbiddenException('Access Denied');
 		}

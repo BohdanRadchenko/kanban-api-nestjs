@@ -12,10 +12,14 @@ POST http://localhost:8080/api/auth/login
 Content-Type: application/json
 
 {
-  "username": "test username",
-  "password": "test password"
+  "username": "admin",
+  "password": "admin"
 }
 
 ### logout
 GET http://localhost:8080/api/auth/logout
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QgdXNlcm5hbWUiLCJpZCI6MiwiaWF0IjoxNjkzNTg0MDUzLCJleHAiOjE2OTM1ODQ5NTN9.CFiVQsFL_sdYWsYcaqb-p8p6LDtopim60rBi-fSKG-M
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiX2lkIjoiNjRmMjU3YWMxMTg3MzI2N2FlYWU0OTM5IiwiaWF0IjoxNjkzNjAzODQzLCJleHAiOjE2OTM2MDQ3NDN9.xQESUVmE3Hc8stWDKroyqt1TMtejmXMDyDPcLNGuR1Y
+
+### fefresh token
+GET http://localhost:8080/api/auth/refresh
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiX2lkIjoiNjRmMjU3YWMxMTg3MzI2N2FlYWU0OTM5IiwiaWF0IjoxNjkzNjAzODgyLCJleHAiOjE2OTQyMDg2ODJ9.52LkKFj2HYSShFiEqPwOs2fm1hPNZxUMglgD-8mCtMQ
