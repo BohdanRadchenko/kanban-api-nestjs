@@ -1,1 +1,2 @@
-export { User } from './user.entity';
+export { User, UserSchema, UserDocument } from './user.entity';
+export { Board, BoardSchema, BoardDocument } from './board.entity';

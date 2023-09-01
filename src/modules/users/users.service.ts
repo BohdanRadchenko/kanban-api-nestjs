@@ -1,22 +1,26 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
 import { User } from '../../entities';
 
 @Injectable()
 export class UsersService {
-	constructor(@InjectRepository(User) private readonly userRepository: Repository<User>) {}
+	constructor(
+		@InjectModel(User.name)
+		private readonly userModel: Model<User>
+	) {}
 
 	public async isExistByUserName(username: string): Promise<boolean> {
-		return await this.userRepository.exist({ where: { username } });
+		const result = await this.userModel.exists({ username }).exec();
+		return !!result;
 	}
 
 	public async get(): Promise<User[]> {
-		return this.userRepository.find();
+		return this.userModel.find().exec();
 	}
 
 	public async getById(id: User['id']): Promise<User> {
-		const user = await this.userRepository.findOneBy({ id });
+		const user = await this.userModel.findOne({ id }).exec();
 		if (!user) {
 			throw new NotFoundException(`User with ID: ${id} not found!`);
 		}
@@ -24,7 +28,7 @@ export class UsersService {
 	}
 
 	public async getByUsername(username: string): Promise<User> {
-		const user = await this.userRepository.findOneBy({ username });
+		const user = await this.userModel.findOne({ username }).exec();
 		if (!user) {
 			throw new NotFoundException(`User with username ${username} not found!`);
 		}
@@ -32,17 +36,10 @@ export class UsersService {
 	}
 
 	public async save(user: User): Promise<User> {
-		return this.userRepository.save(user);
+		return this.userModel.create(user);
 	}
 
-	public async updateRefreshToken(userId: User['id'], refreshToken: string) {
-		return this.userRepository
-			.createQueryBuilder()
-			.update(User)
-			.set({
-				refreshToken,
-			})
-			.where('id = :id', { id: userId })
-			.execute();
+	public async updateRefreshToken(userId: User['_id'], refreshToken: string) {
+		return this.userModel.findOneAndUpdate({ _id: userId }, { refreshToken }).exec();
 	}
 }

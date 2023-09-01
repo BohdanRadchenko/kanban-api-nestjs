@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
+import { MongooseModule } from '@nestjs/mongoose';
 import { PassportModule } from '@nestjs/passport';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from '../../entities';
+import { User, UserSchema } from '../../entities';
 import { UsersModule } from '../users/users.module';
 import { UsersService } from '../users/users.service';
 import { AuthController } from './auth.controller';
@@ -11,7 +11,12 @@ import { JwtAccessStrategy } from './strategies/jwt-access.strategy';
 import { JwtRefreshStrategy } from './strategies/jwt-refresh.strategy';
 
 @Module({
-	imports: [TypeOrmModule.forFeature([User]), JwtModule.register({ global: true }), PassportModule, UsersModule],
+	imports: [
+		MongooseModule.forFeature([{ name: User.name, schema: UserSchema, collection: User.name }]),
+		JwtModule.register({ global: true }),
+		PassportModule,
+		UsersModule
+	],
 	controllers: [AuthController],
 	providers: [AuthService, JwtAccessStrategy, JwtRefreshStrategy, UsersService]
 })

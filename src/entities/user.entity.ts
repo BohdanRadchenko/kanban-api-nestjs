@@ -1,18 +1,19 @@
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import * as bcrypt from 'bcrypt';
-import { Column, Entity } from 'typeorm';
+import { HydratedDocument } from 'mongoose';
 import { SALT_OR_ROUNDS } from '../constants/auth.constants';
 import { AuthRequestDto } from '../modules/auth/dto/auth-request.dto';
 import { AbstractEntity } from './abstract.entity';
 
-@Entity('user')
+@Schema()
 export class User extends AbstractEntity {
-	@Column({ unique: true })
+	@Prop({ unique: true })
 	username: string;
 
-	@Column({ nullable: false, name: 'password' })
+	@Prop({ name: 'password' })
 	passwordHash: string;
 
-	@Column({ nullable: true })
+	@Prop()
 	refreshToken: string;
 
 	public async compare(password: string): Promise<boolean> {
@@ -26,3 +27,7 @@ export class User extends AbstractEntity {
 		return user;
 	}
 }
+
+export type UserDocument = HydratedDocument<User>;
+
+export const UserSchema = SchemaFactory.createForClass(User);

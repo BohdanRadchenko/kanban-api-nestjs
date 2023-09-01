@@ -1,17 +1,15 @@
-import { CreateDateColumn, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { Prop } from '@nestjs/mongoose';
+import { Types } from 'mongoose';
 
 export abstract class AbstractEntity {
-	@PrimaryGeneratedColumn()
-	id: number;
+	_id: Types.ObjectId;
 
-	@CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP(6)', name: 'created_at' })
-	public createdAt: Date;
+	@Prop()
+	__v: number;
 
-	@UpdateDateColumn({
-		type: 'timestamp',
-		default: () => 'CURRENT_TIMESTAMP(6)',
-		onUpdate: 'CURRENT_TIMESTAMP(6)',
-		name: 'updated_at'
-	})
-	public updatedAt: Date;
+	@Prop()
+	createdAt?: Date;
+
+	@Prop()
+	updatedAt?: Date;
 }

@@ -1,10 +1,11 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { TypeOrmConfigService } from './config/TypeOrmConfigService';
+import { MongooseModule } from '@nestjs/mongoose';
+import { MongooseConfigService } from './config/mongo.config';
 import { AuthController } from './modules/auth/auth.controller';
 import { AuthModule } from './modules/auth/auth.module';
 import { AuthService } from './modules/auth/auth.service';
+import { BoardsModule } from './modules/boards/boards.module';
 import { UsersModule } from './modules/users/users.module';
 
 @Module({
@@ -13,13 +14,14 @@ import { UsersModule } from './modules/users/users.module';
 			envFilePath: '.env',
 			isGlobal: true
 		}),
-		TypeOrmModule.forRootAsync({
+		MongooseModule.forRootAsync({
 			imports: [ConfigModule],
 			inject: [ConfigService],
-			useClass: TypeOrmConfigService
+			useClass: MongooseConfigService
 		}),
 		UsersModule,
-		AuthModule
+		AuthModule,
+		BoardsModule
 	],
 	controllers: [AuthController],
 	providers: [AuthService]
