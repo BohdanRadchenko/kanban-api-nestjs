@@ -1,5 +1,4 @@
-import { ArrayUnique, IsNotEmpty, IsOptional, IsString, MaxLength, MinLength } from 'class-validator';
-import { Types } from 'mongoose';
+import { IsNotEmpty, IsOptional, IsString, MaxLength, MinLength } from 'class-validator';
 import { BOARD_TITLE_MAX_LENGTH, BOARD_TITLE_MIN_LENGTH } from '../../../constants/boards.constants';
 
 export class BoardUpdateRequestDto {
@@ -8,15 +7,17 @@ export class BoardUpdateRequestDto {
 	@IsNotEmpty()
 	@MinLength(BOARD_TITLE_MIN_LENGTH)
 	@MaxLength(BOARD_TITLE_MAX_LENGTH)
-	title!: string;
+	title: string;
 
-	@IsOptional()
-	@IsString()
-	@IsNotEmpty()
-	owner!: Types.ObjectId;
+	//TODO: change owner to another mapping
+	// @IsOptional()
+	// @IsString()
+	// @IsNotEmpty()
+	// owner!: Types.ObjectId;
 
-	@IsOptional()
-	@ArrayUnique()
-	@IsNotEmpty()
-	access!: Types.ObjectId[];
+	//TODO: add/remove access to another mapping
+	// @IsOptional()
+	// @ArrayUnique()
+	// @IsNotEmpty()
+	// access!: Types.ObjectId[];
 }

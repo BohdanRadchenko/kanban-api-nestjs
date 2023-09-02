@@ -39,7 +39,7 @@ Authorization: Bearer {{token}}
 
 {
   "_id": "64f257ac11873267aeae4939",
-  "title": "update one",
+  "title": "update test",
   "owner": "64f257ac11873267aeae4939",
   "hello": "world",
   "access": [

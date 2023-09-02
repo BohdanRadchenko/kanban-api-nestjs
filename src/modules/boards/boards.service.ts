@@ -89,7 +89,7 @@ export class BoardsService {
 	): Promise<Board> {
 		await this.validateBoardExist(boardId);
 		await this.validateBoardOwner(boardId, userId);
-		
+
 		return this.model.findOneAndUpdate(
 			{ _id: boardId, owner: userId },
 			{ ...data },
