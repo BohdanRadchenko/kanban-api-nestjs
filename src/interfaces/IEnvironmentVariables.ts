@@ -7,6 +7,8 @@ export interface IEnvironmentVariables {
 	DB_PASSWORD: string;
 	DB_NAME: string;
 	JWT_ACCESS_SECRET: string;
+	JWT_ACCESS_SECRET_EXPIRE: string;
 	JWT_REFRESH_SECRET: string;
+	JWT_REFRESH_SECRET_EXPIRE: string;
 	MONGO_CONNECT: string;
 }

@@ -2,19 +2,19 @@ import { BadRequestException, ForbiddenException, Injectable } from '@nestjs/com
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import * as argon2 from 'argon2';
-import { JWT_ACCESS_SECRET_EXPIRE, JWT_REFRESH_SECRET_EXPIRE } from '../../constants/auth.constants';
 import { User } from '../../entities';
 import { AlreadyExistException } from '../../exceptions';
+import { IEnvironmentVariables } from '../../interfaces/IEnvironmentVariables';
 import { IJwtPayload } from '../../interfaces/IJwtPayload';
 import { UsersService } from '../users/users.service';
-import { AuthRequestDto } from './dto/auth-request.dto';
-import { AuthResponseDto } from './dto/auth-response.dto';
+import { AuthRequestDto } from './dto/auth.request.dto';
+import { AuthResponseDto } from './dto/auth.response.dto';
 
 @Injectable()
 export class AuthService {
 	constructor(
 		private readonly usersService: UsersService,
-		private readonly config: ConfigService,
+		private readonly config: ConfigService<IEnvironmentVariables>,
 		private readonly jwt: JwtService
 	) {}
 
@@ -31,11 +31,11 @@ export class AuthService {
 		const [accessToken, refreshToken] = await Promise.all([
 			this.jwt.signAsync(payload, {
 				secret: this.config.get('JWT_ACCESS_SECRET'),
-				expiresIn: JWT_ACCESS_SECRET_EXPIRE
+				expiresIn: this.config.get('JWT_ACCESS_SECRET_EXPIRE')
 			}),
 			this.jwt.signAsync(payload, {
 				secret: this.config.get('JWT_REFRESH_SECRET'),
-				expiresIn: JWT_REFRESH_SECRET_EXPIRE
+				expiresIn: this.config.get('JWT_REFRESH_SECRET_EXPIRE')
 			})
 		]);
 

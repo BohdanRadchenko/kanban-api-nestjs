@@ -2,7 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import * as bcrypt from 'bcrypt';
 import { HydratedDocument } from 'mongoose';
 import { SALT_OR_ROUNDS } from '../constants/auth.constants';
-import { AuthRequestDto } from '../modules/auth/dto/auth-request.dto';
+import { AuthRequestDto } from '../modules/auth/dto/auth.request.dto';
 import { AbstractEntity } from './abstract.entity';
 
 @Schema()

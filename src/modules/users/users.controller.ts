@@ -1,5 +1,5 @@
 import { Controller, Get, UseGuards } from '@nestjs/common';
-import { UserId } from '../../decorators/user-id.decorator';
+import { UseUser } from '../../decorators/user.decorator';
 import { AccessJwtGuard } from '../../guards/access-jwt.guard';
 import { UsersService } from './users.service';
 
@@ -9,7 +9,7 @@ export class UsersController {
 
 	@Get()
 	@UseGuards(AccessJwtGuard)
-	get(@UserId() userId: number) {
+	get(@UseUser() userId: number) {
 		console.log('userId', userId);
 		return this.usersService.get();
 	}

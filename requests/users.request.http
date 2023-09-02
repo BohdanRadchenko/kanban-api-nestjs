@@ -3,4 +3,4 @@ GET http://localhost:8080/api/users
 
 ### Get all users with token
 GET http://localhost:8080/api/users
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QgdXNlcm5hbWUiLCJpZCI6MiwiaWF0IjoxNjkzNTg0MTczLCJleHAiOjE2OTM1ODUwNzN9.IulHmfPLuNtwLFP0ekxv-WVQysbKFeICmUXYJKNxhms
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiX2lkIjoiNjRmMjU3YWMxMTg3MzI2N2FlYWU0OTM5IiwiaWF0IjoxNjkzNjA0MDM4LCJleHAiOjE2OTM2MDQ5Mzh9.DdpJTdCAJqJPCHPLS2b6GBV0nlS-nTE8Aatu1qradHI

@@ -3,8 +3,8 @@ import { Request } from 'express';
 import { AccessJwtGuard } from '../../guards/access-jwt.guard';
 import { RefreshJwtGuard } from '../../guards/refresh-jwt.guard';
 import { AuthService } from './auth.service';
-import { AuthRequestDto } from './dto/auth-request.dto';
-import { AuthResponseDto } from './dto/auth-response.dto';
+import { AuthRequestDto } from './dto/auth.request.dto';
+import { AuthResponseDto } from './dto/auth.response.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -32,7 +32,7 @@ export class AuthController {
 	@UseGuards(RefreshJwtGuard)
 	@Get('refresh')
 	refreshTokens(@Req() req: Request) {
-		const userId = req.user['id'];
+		const userId = req.user['_id'];
 		const refreshToken = req.user['refreshToken'];
 		return this.authService.refreshTokens(userId, refreshToken);
 	}
