@@ -13,7 +13,7 @@ Content-Type: application/json
 Authorization: Bearer {{token}}
 
 {
-  "title": "test for delete"
+  "title": "test update"
 }
 
 ### get boards for user by id from token
@@ -28,6 +28,22 @@ Content-Type: application/json
 Authorization: Bearer {{token}}
 
 ### get board by id with token
-GET http://localhost:{{port}}/{{prefix}}/boards/64f2e789cefbc1a715b48e7e
+GET http://localhost:{{port}}/{{prefix}}/boards/64f3222d190bf063d52ed9b8
 Content-Type: application/json
 Authorization: Bearer {{token}}
+
+### update board by id with token
+PATCH http://localhost:{{port}}/{{prefix}}/boards/64f3222d190bf063d52ed9b8
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "_id": "64f257ac11873267aeae4939",
+  "title": "update one",
+  "owner": "64f257ac11873267aeae4939",
+  "hello": "world",
+  "access": [
+    "64f257ac11873267aeae4939",
+    "64f3222d190bf063d52ed9b8"
+  ]
+}

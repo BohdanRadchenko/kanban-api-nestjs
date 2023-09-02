@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Board, User } from '../../entities';
 import { BoardCreateRequestDto } from './dto/board-create.request.dto';
+import { BoardUpdateRequestDto } from './dto/board-update.request.dto';
 
 @Injectable()
 export class BoardsService {
@@ -79,5 +80,20 @@ export class BoardsService {
 				]
 			})
 			.exec();
+	}
+
+	public async updateBoardById(
+		boardId: Board['_id'],
+		userId: User['_id'],
+		data: BoardUpdateRequestDto
+	): Promise<Board> {
+		await this.validateBoardExist(boardId);
+		await this.validateBoardOwner(boardId, userId);
+		
+		return this.model.findOneAndUpdate(
+			{ _id: boardId, owner: userId },
+			{ ...data },
+			{ new: true }
+		).exec();
 	}
 }

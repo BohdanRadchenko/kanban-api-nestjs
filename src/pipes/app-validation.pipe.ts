@@ -5,7 +5,9 @@ export class AppValidationPipe extends ValidationPipe {
 	constructor(options?: ValidationPipeOptions) {
 		super({
 			exceptionFactory: (errors: ValidationError[]) => new ValidationException(errors),
-			...options
+			...options,
+			transform: true,
+			whitelist: true
 		});
 	}
 }
