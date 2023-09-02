@@ -16,6 +16,6 @@ export class BoardsService {
 	}
 
 	public async getForUserById(userId: User['_id']): Promise<Board[]> {
-		return this.model.find({ $or: [{ access: { $in: [userId] } }, { owner: userId }] }).exec();
+		return this.model.find({ $or: [{ access: { $in: [userId] } }, { owner: userId }] });
 	}
 }

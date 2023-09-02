@@ -4,6 +4,7 @@ import { User } from '../../entities';
 import { AccessJwtGuard } from '../../guards/access-jwt.guard';
 import { BoardsService } from './boards.service';
 import { BoardCreateRequestDto } from './dto/board-create.request.dto';
+import { BoardResponseDto } from './dto/board.response.dto';
 
 @Controller('boards')
 export class BoardsController {
@@ -11,13 +12,15 @@ export class BoardsController {
 
 	@Post()
 	@UseGuards(AccessJwtGuard)
-	create(@Body() dto: BoardCreateRequestDto, @UseUser() user: User) {
-		return this.service.create(user._id, dto);
+	async create(@Body() dto: BoardCreateRequestDto, @UseUser() user: User) {
+		const board = await this.service.create(user._id, dto);
+		return BoardResponseDto.of(board, user);
 	}
 
 	@Get()
 	@UseGuards(AccessJwtGuard)
 	async getBoardsForUserById(@UseUser() user: User) {
-		return this.service.getForUserById(user._id);
+		const data = await this.service.getForUserById(user._id);
+		return data.map((board) => BoardResponseDto.of(board, user));
 	}
 }
