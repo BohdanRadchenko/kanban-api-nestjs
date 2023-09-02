@@ -6,7 +6,7 @@ import { IEnvironmentVariables } from '../../../interfaces/IEnvironmentVariables
 import { IJwtPayload } from '../../../interfaces/IJwtPayload';
 
 @Injectable()
-export class JwtAccessStrategy extends PassportStrategy(Strategy, 'jwt-access') {
+export class JwtAccessStrategy extends PassportStrategy(Strategy, 'jwt') {
 	constructor(private readonly config: ConfigService<IEnvironmentVariables>) {
 		super({
 			jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
