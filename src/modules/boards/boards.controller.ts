@@ -5,6 +5,7 @@ import { AccessJwtGuard } from '../../guards/access-jwt.guard';
 import { ParseObjectIdPipe } from '../../pipes/parse-object-id.pipe';
 import { BoardsService } from './boards.service';
 import { BoardCreateRequestDto } from './dto/board-create.request.dto';
+import { BoardUpdateRequestDto } from './dto/board-update.request.dto';
 import { BoardResponseDto } from './dto/board.response.dto';
 
 @Controller('boards')
