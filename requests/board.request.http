@@ -28,6 +28,6 @@ Content-Type: application/json
 Authorization: Bearer {{token}}
 
 ### get board by id with token
-GET http://localhost:{{port}}/{{prefix}}/boards/64f306d5920fd83f83b09e12
+GET http://localhost:{{port}}/{{prefix}}/boards/64f2e789cefbc1a715b48e7e
 Content-Type: application/json
 Authorization: Bearer {{token}}
