@@ -13,6 +13,39 @@ export class BoardsService {
 		return !!data;
 	}
 
+	private async validateBoardExist(boardId: Board['_id']) {
+		const isExist = await this.isExistById(boardId);
+		if (!isExist) {
+			throw new NotFoundException(`Board with ID: ${boardId} not found!`);
+		}
+	}
+
+	private async validateBoardAccess(boardId: Board['_id'], userId: User['_id']): Promise<boolean> {
+		const data = await this.model
+			.exists({
+				$or: [
+					{ _id: boardId, owner: userId },
+					{ _id: boardId, access: { $in: [userId] } }
+				]
+			})
+			.exec();
+
+		if (!data) {
+			throw new ForbiddenException();
+		}
+
+		return true;
+	}
+
+	private async validateBoardOwner(boardId: Board['_id'], userId: User['_id']): Promise<boolean> {
+		const data = await this.model.exists({ _id: boardId, owner: userId }).exec();
+		if (!data) {
+			throw new ForbiddenException();
+		}
+
+		return true;
+	}
+
 	public async create(userId: User['_id'], dto: BoardCreateRequestDto): Promise<Board> {
 		return this.model.create({
 			...dto,
@@ -25,15 +58,26 @@ export class BoardsService {
 	}
 
 	public async deleteBoardById(boardId: Board['_id'], userId: User['_id']) {
-		const isExist = await this.isExistById(boardId);
-		if (!isExist) {
-			throw new NotFoundException(`Board with ID: ${boardId} not found!`);
-		}
-
+		await this.validateBoardExist(boardId);
+		await this.validateBoardOwner(boardId, userId);
 		const data = await this.model.findOneAndDelete({ _id: boardId, owner: userId }).exec();
 		if (!data) {
 			throw new ForbiddenException();
 		}
 		return data;
+	}
+
+	public async getById(boardId: Board['_id'], userId: User['_id']): Promise<Board> {
+		await this.validateBoardExist(boardId);
+		await this.validateBoardAccess(boardId, userId);
+
+		return this.model
+			.findOne({
+				$or: [
+					{ _id: boardId, owner: userId },
+					{ _id: boardId, access: { $in: [userId] } }
+				]
+			})
+			.exec();
 	}
 }

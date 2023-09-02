@@ -1,5 +1,5 @@
 ### login
-POST http://localhost:8080/api/auth/login
+POST http://localhost:{{port}}/{{prefix}}/auth/login
 Content-Type: application/json
 
 {
@@ -8,20 +8,26 @@ Content-Type: application/json
 }
 
 ### create board
-POST http://localhost:8080/api/boards
+POST http://localhost:{{port}}/{{prefix}}/boards
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiX2lkIjoiNjRmMjU3YWMxMTg3MzI2N2FlYWU0OTM5IiwiaWF0IjoxNjkzNjQzNDczLCJleHAiOjE2OTM2NDQzNzN9.rIoKA1zlI05SBTlGe2mfkjFV5ThyOkfm8t8NAMlIru8
+Authorization: Bearer {{token}}
 
 {
   "title": "test for delete"
 }
 
 ### get boards for user by id from token
-GET http://localhost:8080/api/boards
+#GET http://localhost:8080/api/boards
+GET http://localhost:{{port}}/{{prefix}}/boards
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiX2lkIjoiNjRmMjU3YWMxMTg3MzI2N2FlYWU0OTM5IiwiaWF0IjoxNjkzNjQzNDczLCJleHAiOjE2OTM2NDQzNzN9.rIoKA1zlI05SBTlGe2mfkjFV5ThyOkfm8t8NAMlIru8
+Authorization: Bearer {{token}}
 
 ### delete board by id with token
-DELETE http://localhost:8080/api/boards/64f2f2df51c6d19fe5c36bee
+DELETE http://localhost:{{port}}/{{prefix}}/boards/64f2f2df51c6d19fe5c36bee
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiX2lkIjoiNjRmMjU3YWMxMTg3MzI2N2FlYWU0OTM5IiwiaWF0IjoxNjkzNjQzNDczLCJleHAiOjE2OTM2NDQzNzN9.rIoKA1zlI05SBTlGe2mfkjFV5ThyOkfm8t8NAMlIru8
+Authorization: Bearer {{token}}
+
+### get board by id with token
+GET http://localhost:{{port}}/{{prefix}}/boards/64f306d5920fd83f83b09e12
+Content-Type: application/json
+Authorization: Bearer {{token}}

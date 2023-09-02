@@ -1,5 +1,5 @@
 ### register
-POST http://localhost:8080/api/auth/register
+POST http://localhost:{{port}}/{{prefix}}}}/auth/register
 Content-Type: application/json
 
 {
@@ -8,7 +8,7 @@ Content-Type: application/json
 }
 
 ### login
-POST http://localhost:8080/api/auth/login
+POST http://localhost:{{port}}/{{prefix}}/auth/login
 Content-Type: application/json
 
 {
@@ -17,9 +17,9 @@ Content-Type: application/json
 }
 
 ### logout
-GET http://localhost:8080/api/auth/logout
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiX2lkIjoiNjRmMjU3YWMxMTg3MzI2N2FlYWU0OTM5IiwiaWF0IjoxNjkzNjAzODQzLCJleHAiOjE2OTM2MDQ3NDN9.xQESUVmE3Hc8stWDKroyqt1TMtejmXMDyDPcLNGuR1Y
+GET http://localhost:{{port}}/{{prefix}}/auth/logout
+Authorization: Bearer {{token}}
 
 ### fefresh token
-GET http://localhost:8080/api/auth/refresh
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiX2lkIjoiNjRmMjU3YWMxMTg3MzI2N2FlYWU0OTM5IiwiaWF0IjoxNjkzNjAzODgyLCJleHAiOjE2OTQyMDg2ODJ9.52LkKFj2HYSShFiEqPwOs2fm1hPNZxUMglgD-8mCtMQ
+GET http://localhost:{{port}}/{{prefix}}/auth/refresh
+Authorization: Bearer {{token}}

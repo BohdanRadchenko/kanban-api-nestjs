@@ -30,4 +30,11 @@ export class BoardsController {
 	async delete(@Param('boardId') boardId: Board['_id'], @UseUser() user: User) {
 		return this.service.deleteBoardById(boardId, user._id);
 	}
+
+	@Get(':boardId')
+	@UseGuards(AccessJwtGuard)
+	async getBoardById(@Param('boardId') boardId: Board['_id'], @UseUser() user: User) {
+		const board = await this.service.getById(boardId, user._id);
+		return BoardResponseDto.of(board, user);
+	}
 }
