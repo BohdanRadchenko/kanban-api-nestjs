@@ -18,7 +18,7 @@ export class AuthController {
 
 	@Post('register')
 	@HttpCode(HttpStatus.OK)
-	signUp(@Body() dto: AuthRequestDto) {
+	signUp(@Body() dto: AuthRequestDto): Promise<AuthResponseDto> {
 		return this.authService.signUp(dto);
 	}
 
@@ -31,7 +31,7 @@ export class AuthController {
 
 	@UseGuards(RefreshJwtGuard)
 	@Get('refresh')
-	refreshTokens(@Req() req: Request) {
+	refreshTokens(@Req() req: Request): Promise<AuthResponseDto> {
 		const userId = req.user['_id'];
 		const refreshToken = req.user['refreshToken'];
 		return this.authService.refreshTokens(userId, refreshToken);

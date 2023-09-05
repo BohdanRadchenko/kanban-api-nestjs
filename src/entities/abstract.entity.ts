@@ -1,13 +1,8 @@
 import { Prop } from '@nestjs/mongoose';
-import { Types } from 'mongoose';
+import { Document } from 'mongoose';
 
-export abstract class AbstractEntity {
-	_id: Types.ObjectId;
-
-	@Prop()
-	__v: number;
-
-	@Prop()
+export abstract class AbstractEntity extends Document {
+	@Prop({ default: Date.now })
 	createdAt?: Date;
 
 	@Prop()

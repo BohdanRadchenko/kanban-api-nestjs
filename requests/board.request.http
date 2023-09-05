@@ -23,12 +23,12 @@ Content-Type: application/json
 Authorization: Bearer {{token}}
 
 ### delete board by id with token
-DELETE http://localhost:{{port}}/{{prefix}}/boards/64f2f2df51c6d19fe5c36bee
+DELETE http://localhost:{{port}}/{{prefix}}/boards/64f7311d3a100aea45fa9a5a
 Content-Type: application/json
 Authorization: Bearer {{token}}
 
 ### get board by id with token
-GET http://localhost:{{port}}/{{prefix}}/boards/64f3222d190bf063d52ed9b8
+GET http://localhost:{{port}}/{{prefix}}/boards/64f642e89525a416fa435da9
 Content-Type: application/json
 Authorization: Bearer {{token}}
 

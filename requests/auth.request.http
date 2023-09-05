@@ -1,10 +1,10 @@
 ### register
-POST http://localhost:{{port}}/{{prefix}}}}/auth/register
+POST http://localhost:{{port}}/{{prefix}}/auth/register
 Content-Type: application/json
 
 {
-  "username": "admin",
-  "password": "admin"
+  "username": "admin1",
+  "password": "admin1"
 }
 
 ### login

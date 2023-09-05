@@ -85,7 +85,7 @@ export class AuthService {
 		return this.updateRefreshToken(userId, null);
 	}
 
-	public async refreshTokens(userId: User['_id'], refreshToken: string) {
+	public async refreshTokens(userId: User['_id'], refreshToken: string): Promise<AuthResponseDto> {
 		const user = await this.usersService.getById(userId);
 		if (!user || !user.refreshToken) {
 			throw new ForbiddenException('Access Denied');

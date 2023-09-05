@@ -1,13 +1,18 @@
 import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { Board, User } from '../../entities';
+import { Board, List, User } from '../../entities';
+import { ListCreateRequestDto } from '../lists/dto/list-create.request.dto';
+import { ListsService } from '../lists/lists.service';
 import { BoardCreateRequestDto } from './dto/board-create.request.dto';
 import { BoardUpdateRequestDto } from './dto/board-update.request.dto';
 
 @Injectable()
 export class BoardsService {
-	constructor(@InjectModel(Board.name) private readonly model: Model<Board>) {}
+	constructor(
+		@InjectModel(Board.name) private readonly model: Model<Board>,
+		private readonly listsService: ListsService
+	) {}
 
 	private async isExistById(boardId: Board['_id']): Promise<boolean> {
 		const data = await this.model.exists({ _id: boardId }).exec();
@@ -54,17 +59,22 @@ export class BoardsService {
 		});
 	}
 
-	public async getForUserById(userId: User['_id']): Promise<Board[]> {
-		return this.model.find({ $or: [{ access: { $in: [userId] } }, { owner: userId }] });
+	public async getForUserById(userId: User['_id']) {
+		return this.model
+			.find({ $or: [{ access: { $in: [userId] } }, { owner: userId }] })
+			.populate('owner')
+			.exec();
 	}
 
-	public async deleteBoardById(boardId: Board['_id'], userId: User['_id']) {
+	public async deleteById(boardId: Board['_id'], userId: User['_id']) {
 		await this.validateBoardExist(boardId);
 		await this.validateBoardOwner(boardId, userId);
 		const data = await this.model.findOneAndDelete({ _id: boardId, owner: userId }).exec();
 		if (!data) {
 			throw new ForbiddenException();
 		}
+		//TODO: how to create cascade delete action function
+		await Promise.all(data.lists.map((listId) => this.listsService.remove(listId)));
 		return data;
 	}
 
@@ -79,6 +89,11 @@ export class BoardsService {
 					{ _id: boardId, access: { $in: [userId] } }
 				]
 			})
+			.populate('owner')
+			.populate({
+				path: 'lists',
+				options: { sort: { pos: 1 } }
+			})
 			.exec();
 	}
 
@@ -90,10 +105,29 @@ export class BoardsService {
 		await this.validateBoardExist(boardId);
 		await this.validateBoardOwner(boardId, userId);
 
-		return this.model.findOneAndUpdate(
-			{ _id: boardId, owner: userId },
-			{ ...data },
-			{ new: true }
-		).exec();
+		return this.model.findOneAndUpdate({ _id: boardId, owner: userId }, { ...data }, { new: true }).exec();
+	}
+
+	public async createBoardList(boardId: Board['_id'], userId: User['_id'], body: ListCreateRequestDto): Promise<List> {
+		await this.validateBoardExist(boardId);
+		await this.validateBoardAccess(boardId, userId);
+
+		const board = (await this.model.findById(boardId).exec()) as Board;
+
+		const list = await this.listsService.create({ pos: board.lists.length, ...body, board: boardId });
+
+		board.lists.push(list);
+
+		await board.save();
+
+		// await this.model
+		// 	.findByIdAndUpdate(boardId, {
+		// 		$push: {
+		// 			lists: list._id
+		// 		}
+		// 	})
+		// 	.exec();
+
+		return list;
 	}
 }

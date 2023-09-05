@@ -3,6 +3,7 @@ import { UseUser } from '../../decorators/user.decorator';
 import { Board, User } from '../../entities';
 import { AccessJwtGuard } from '../../guards/access-jwt.guard';
 import { ParseObjectIdPipe } from '../../pipes/parse-object-id.pipe';
+import { BoardsGateway } from './boards.gateway';
 import { BoardsService } from './boards.service';
 import { BoardCreateRequestDto } from './dto/board-create.request.dto';
 import { BoardUpdateRequestDto } from './dto/board-update.request.dto';
@@ -10,7 +11,10 @@ import { BoardResponseDto } from './dto/board.response.dto';
 
 @Controller('boards')
 export class BoardsController {
-	constructor(private readonly service: BoardsService) {}
+	constructor(
+		private readonly service: BoardsService,
+		private readonly boardsGateway: BoardsGateway
+	) {}
 
 	@Post()
 	@UseGuards(AccessJwtGuard)
@@ -30,7 +34,9 @@ export class BoardsController {
 	@UseGuards(AccessJwtGuard)
 	@HttpCode(HttpStatus.NO_CONTENT)
 	async delete(@Param('boardId', ParseObjectIdPipe) boardId: Board['_id'], @UseUser() user: User) {
-		return this.service.deleteBoardById(boardId, user._id);
+		await this.service.deleteById(boardId, user._id);
+		this.boardsGateway.disconnectAllFrom(boardId);
+		return;
 	}
 
 	@Get(':boardId')
