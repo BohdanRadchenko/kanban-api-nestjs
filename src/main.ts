@@ -7,15 +7,13 @@ import { AppValidationPipe } from './pipes/app-validation.pipe';
 //TODO: create facade (filter?) service -> dto -> response
 
 const PORT = parseInt(process.env.PORT) || 8080;
+const origin = process.env.CLIENT || '*';
 
 async function bootstrap() {
 	const app = await NestFactory.create(AppModule);
 
 	app.setGlobalPrefix('/');
-	app.enableCors({
-		origin: '*',
-		methods: ['POST', 'PUT', 'PATCH', 'DELETE', 'GET']
-	});
+	app.enableCors({ origin });
 
 	app.useWebSocketAdapter(new SocketAdapter(app));
 
