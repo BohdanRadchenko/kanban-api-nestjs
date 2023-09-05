@@ -1,5 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { ExpressAdapter } from '@nestjs/platform-express';
+import cors from 'cors';
 import 'dotenv/config';
 import * as express from 'express';
 import * as functions from 'firebase-functions';
