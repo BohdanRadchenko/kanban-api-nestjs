@@ -4,6 +4,7 @@ import { BOARD_TITLE_MAX_LENGTH, BOARD_TITLE_MIN_LENGTH } from '../../../constan
 import { Card } from '../../../entities';
 
 export class ListUpdateRequestDto {
+	@IsNotEmpty()
 	_id: Types.ObjectId;
 
 	@IsOptional()
@@ -12,12 +13,6 @@ export class ListUpdateRequestDto {
 	@MinLength(BOARD_TITLE_MIN_LENGTH)
 	@MaxLength(BOARD_TITLE_MAX_LENGTH)
 	title: string;
-
-	//TODO: change owner to another mapping
-	// @IsOptional()
-	// @IsString()
-	// @IsNotEmpty()
-	// owner!: Types.ObjectId;
 
 	@IsOptional()
 	@ArrayUnique()

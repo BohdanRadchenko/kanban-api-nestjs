@@ -13,10 +13,12 @@ import {
 	EMIT_BOARD_UPDATED,
 	EMIT_LIST_CREATED,
 	EMIT_LIST_DELETED,
+	EMIT_LIST_REORDERED,
 	EMIT_LIST_UPDATED,
 	EVENT_BOARD_UPDATE,
 	EVENT_LIST_CREATE,
 	EVENT_LIST_DELETE,
+	EVENT_LIST_REORDER,
 	EVENT_LIST_UPDATE
 } from '../../constants/boards.endpoint';
 import { UseUser } from '../../decorators/user.decorator';
@@ -108,6 +110,10 @@ export class BoardsGateway implements OnGatewayConnection, OnGatewayDisconnect {
 		this.emit(EMIT_LIST_UPDATED, data, credential);
 	}
 
+	private reorderedList(data, credential) {
+		this.emit(EMIT_LIST_REORDERED, data, credential);
+	}
+
 	public disconnectAllFrom(boardId: Board['_id']) {
 		this.emit('disconnected', null, { id: null, boardId });
 		this.io.in(boardId.toString()).disconnectSockets(true);
@@ -181,5 +187,19 @@ export class BoardsGateway implements OnGatewayConnection, OnGatewayDisconnect {
 		const { userId, boardId } = this.validateClient(client);
 		await this.listsService.updateListByEntity(body);
 		this.updatedList(body, { userId, boardId });
+	}
+
+	@SubscribeMessage(EVENT_LIST_REORDER)
+	async handleReorderBoardLists(
+		@MessageBody() body: { lists: ListUpdateRequestDto[] },
+		@ConnectedSocket() client: ISocketAuth,
+		@UseUser() user: User
+	) {
+		this.logEvent(EVENT_LIST_REORDER, body, this.getClientData(client));
+		const { userId, boardId } = this.validateClient(client);
+
+		const data = await Promise.all(body.lists.map((el) => this.listsService.updateListByEntity(el)));
+		const dtoData = data.map(({ cards, ...rest }) => rest);
+		this.reorderedList(dtoData, { userId, boardId });
 	}
 }

@@ -9,3 +9,6 @@ export const EMIT_LIST_DELETED: string = 'LIST_DELETED';
 
 export const EVENT_LIST_UPDATE: string = 'LIST_UPDATE';
 export const EMIT_LIST_UPDATED: string = 'LIST_UPDATED';
+
+export const EVENT_LIST_REORDER: string = 'LIST_REORDER';
+export const EMIT_LIST_REORDERED: string = 'LIST_REORDERED';
